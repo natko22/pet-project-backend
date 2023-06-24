@@ -4,12 +4,10 @@ const userSchema = new mongoose.Schema({
   username: {
     type: String,
     required: true,
-    unique: true,
   },
   email: {
     type: String,
     required: true,
-    unique: true,
   },
   password: {
     type: String,
@@ -18,10 +16,12 @@ const userSchema = new mongoose.Schema({
   isPetOwner: {
     type: Boolean,
     default: false,
+    required: true,
   },
   isSitter: {
     type: Boolean,
     default: false,
+    required: true,
   },
 });
 
