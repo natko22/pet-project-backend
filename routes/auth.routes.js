@@ -125,4 +125,7 @@ router.get("/verify", isAuthenticated, (req, res) => {
   res.status(200).json(req.payload);
 });
 
+router.get("/test", (req, res) => {
+  res.send("Test route");
+});
 module.exports = router;
