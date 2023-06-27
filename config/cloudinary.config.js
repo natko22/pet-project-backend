@@ -8,13 +8,15 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_SECRET,
 });
 
+const uploadPreset = process.env.UPLOAD_PRESET || "default_upload_preset";
+
 const storage = new CloudinaryStorage({
   cloudinary,
   params: {
-    allowed_formats: ["jpg", "png"],
+    allowed_formats: ["jpg", "png", "jpeg"],
     folder: "pet-project", // The name of the folder in cloudinary
     // resource_type: "raw", // => this is in case you want to upload other types of files, not just images
   },
 });
 
-module.exports = multer({ storage });
+module.exports = multer({ storage }, uploadPreset);

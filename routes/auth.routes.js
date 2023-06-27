@@ -5,7 +5,7 @@ const router = express.Router();
 const saltRounds = 10;
 const User = require("../models/User.model");
 const { isAuthenticated } = require("../middleware/jwt.middleware");
-
+const fileUploader = require("../config/cloudinary.config");
 // Sign Up Route - Creates a new User in the DB
 router.post("/signup", async (req, res) => {
   try {
@@ -125,7 +125,18 @@ router.get("/verify", isAuthenticated, (req, res) => {
   res.status(200).json(req.payload);
 });
 
-router.get("/test", (req, res) => {
-  res.send("Test route");
+// POST "/upload" => Route that receives the image, sends it to Cloudinary via the fileUploader and returns the image URL
+router.post("/upload", fileUploader.single("imageUrl"), (req, res, next) => {
+  console.log("file is: ", req.file);
+
+  if (!req.file) {
+    next(new Error("No file uploaded!"));
+    return;
+  }
+
+  // Get the URL of the uploaded file and send it as a response.
+  // 'fileUrl' can be any name, just make sure you remember to use the same when accessing it on the frontend
+
+  res.json({ fileUrl: req.file.path });
 });
 module.exports = router;
