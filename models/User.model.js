@@ -42,7 +42,10 @@ const userSchema = new mongoose.Schema({
   }],
   img:{
     type:String
-    }
+    },
+  favorites:[{
+    type: Schema.Types.ObjectId
+  }]
 });
 
 const User = mongoose.model("User", userSchema);
