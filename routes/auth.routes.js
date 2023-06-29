@@ -125,6 +125,43 @@ router.get("/verify", isAuthenticated, (req, res) => {
   res.status(200).json(req.payload);
 });
 
+router.get("/edit/:_id", async (req, res) => {
+  try {
+    const userId = req.params._id;
+    // console.log(req.payload);
+    const user = await User.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.status(200).json({ user });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Something went wrong" });
+  }
+});
+
+router.put("/edit/:_id", isAuthenticated, async (req, res, next) => {
+  try {
+    const userId = req.payload._id;
+    const updatedProfile = req.body;
+
+    const user = await User.findByIdAndUpdate(userId, updatedProfile, {
+      new: true,
+    });
+
+    if (!user) {
+      res.status(404).json({ message: "User not found" });
+      return;
+    }
+
+    res.json(user);
+  } catch (error) {
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+
 // POST "/upload" => Route that receives the image, sends it to Cloudinary via the fileUploader and returns the image URL
 router.post("/upload", fileUploader.single("imageUrl"), (req, res, next) => {
   console.log("file is: ", req.file);
