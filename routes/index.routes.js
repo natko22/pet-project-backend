@@ -17,4 +17,10 @@ router.get("/users/:_id", async (req, res) => {
   res.json(user);
 });
 
+// get one pet by id
+router.get("/pets/:_id", async (req, res) => {
+  const pet = await Pet.findById(req.params._id)
+  res.json(pet);
+});
+
 module.exports = router;

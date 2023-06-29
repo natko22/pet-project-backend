@@ -34,6 +34,9 @@ const petSchema = new mongoose.Schema({
   instrunction: {
     type: String,
   },
+  img: {
+    type: String,
+  }
 });
 
 const Pet = mongoose.model("Pet", petSchema);
