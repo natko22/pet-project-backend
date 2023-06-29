@@ -1,7 +1,6 @@
 const mongoose = require("mongoose");
 const { Schema, model } = require("mongoose");
 
-
 const userSchema = new mongoose.Schema({
   username: {
     type: String,
@@ -26,26 +25,36 @@ const userSchema = new mongoose.Schema({
     required: true,
   },
   postalCode: {
-  type:Number
+    type: Number,
   },
-  description:{
-  type:String
+  description: {
+    type: String,
   },
-  reviews:[{
-    type: Schema.Types.ObjectId, ref: 'Review'
-  }],
-  pets:[{
-    type: Schema.Types.ObjectId, ref: 'Pet'
-  }],
-  availability: [{
-    type: Date
-  }],
-  img:{
-    type:String
+  reviews: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "Review",
     },
-  favorites:[{
-    type: Schema.Types.ObjectId
-  }]
+  ],
+  pets: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "Pet",
+    },
+  ],
+  availability: [
+    {
+      type: Date,
+    },
+  ],
+  img: {
+    type: String,
+  },
+  favorites: [
+    {
+      type: Schema.Types.ObjectId,
+    },
+  ],
 });
 
 const User = mongoose.model("User", userSchema);
