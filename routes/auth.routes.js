@@ -125,6 +125,7 @@ router.get("/verify", isAuthenticated, (req, res) => {
   res.status(200).json(req.payload);
 });
 
+// get userId
 router.get("/edit/:_id", async (req, res) => {
   try {
     const userId = req.params._id;
@@ -142,6 +143,7 @@ router.get("/edit/:_id", async (req, res) => {
   }
 });
 
+// update users's profile
 router.put("/edit/:_id", isAuthenticated, async (req, res, next) => {
   try {
     const userId = req.payload._id;
