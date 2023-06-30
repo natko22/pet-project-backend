@@ -1,12 +1,15 @@
 const express = require("express");
+const router = require("express").Router();
+const { isAuthenticated } = require("../middleware/jwt.middleware");
+
 const Pet = require("../models/Pet.model");
 
 // get pet
-router.get("/pets/:_id", async (req, res) => {
+router.get("/edit-pet/:_id", async (req, res) => {
   try {
     const petId = req.params._id;
     // console.log(req.payload);
-    const pet = await Pet.findById(userId);
+    const pet = await Pet.findById(petId);
 
     if (!pet) {
       return res.status(404).json({ message: "Pet not found" });
@@ -20,22 +23,24 @@ router.get("/pets/:_id", async (req, res) => {
 });
 
 // update pets's profile
-router.put("/pet/:_id", isAuthenticated, async (req, res, next) => {
+router.put("/edit-pet/:_id", async (req, res) => {
   try {
     const petId = req.payload._id;
     const updatedPetProfile = req.body;
 
-    const user = await Pet.findByIdAndUpdate(petId, updatedPetProfile, {
+    const pet = await Pet.findByIdAndUpdate(petId, updatedPetProfile, {
       new: true,
     });
 
-    if (!Pet) {
+    if (!pet) {
       res.status(404).json({ message: "Pet not found" });
       return;
     }
 
-    res.json(Pet);
+    res.json(pet);
   } catch (error) {
     res.status(500).json({ message: "Internal server error" });
   }
 });
+
+module.exports = router;
