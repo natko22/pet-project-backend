@@ -24,8 +24,6 @@ router.get("/pets/:_id", async (req, res) => {
 });
 
 // add new pet
-
-// POST /api/pets
 router.post("/add-pet", async (req, res) => {
   try {
     const newPet = new Pet(req.body);

@@ -44,7 +44,7 @@ const userSchema = new mongoose.Schema({
   ],
   availability: [
     {
-      type: Date,
+      type: String,
     },
   ],
   img: {

@@ -31,12 +31,12 @@ const petSchema = new mongoose.Schema({
   diet: {
     type: String,
   },
-  instrunction: {
+  instruction: {
     type: String,
   },
   img: {
     type: String,
-  }
+  },
 });
 
 const Pet = mongoose.model("Pet", petSchema);
