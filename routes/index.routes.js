@@ -35,4 +35,15 @@ router.post("/add-pet", async (req, res) => {
   }
 });
 
+// Get all pet profiles
+router.get("/pets", async (req, res) => {
+  try {
+    const petProfiles = await Pet.find();
+    res.json(petProfiles);
+    console.log(petProfiles, "PET PROFILES");
+  } catch (error) {
+    res.status(500).json({ error: "Error fetching pet profiles" });
+  }
+});
+
 module.exports = router;
