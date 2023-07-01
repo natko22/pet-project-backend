@@ -24,8 +24,6 @@ router.get("/pets/:_id", async (req, res) => {
 });
 
 // add new pet
-
-// POST /api/pets
 router.post("/add-pet", async (req, res) => {
   try {
     const newPet = new Pet(req.body);
@@ -34,6 +32,17 @@ router.post("/add-pet", async (req, res) => {
     res.status(201).json(savedPet);
   } catch (error) {
     res.status(500).json({ error: "Error adding pet" });
+  }
+});
+
+// Get all pet profiles
+router.get("/pets", async (req, res) => {
+  try {
+    const petProfiles = await Pet.find();
+    res.json(petProfiles);
+    console.log(petProfiles, "PET PROFILES");
+  } catch (error) {
+    res.status(500).json({ error: "Error fetching pet profiles" });
   }
 });
 
