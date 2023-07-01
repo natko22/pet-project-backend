@@ -26,13 +26,15 @@ router.get("/pets/:_id", async (req, res) => {
 // add new pet
 router.post("/add-pet", async (req, res) => {
   try {
-    const ownerId = req.body.owner
-    delete req.body.owner
-    console.log(ownerId, req.body)
+    const ownerId = req.body.owner;
+    delete req.body.owner;
+    console.log(ownerId, req.body);
     const newPet = new Pet(req.body);
     console.log(newPet);
     const savedPet = await newPet.save();
-    const updatedUser = await User.findByIdAndUpdate(ownerId,{$push:{pets:savedPet._id}})
+    const updatedUser = await User.findByIdAndUpdate(ownerId, {
+      $push: { pets: savedPet._id },
+    });
     res.status(201).json(savedPet);
   } catch (error) {
     res.status(500).json({ error: "Error adding pet" });
@@ -47,6 +49,41 @@ router.get("/pets", async (req, res) => {
     console.log(petProfiles, "PET PROFILES");
   } catch (error) {
     res.status(500).json({ error: "Error fetching pet profiles" });
+  }
+});
+
+// Add or remove user from favorites
+router.put("/favorites/:userId", async (req, res, next) => {
+  try {
+    const userId = req.params.userId;
+    const { userIdToAdd, userIdToRemove } = req.body;
+
+    let updatedUser;
+
+    if (userIdToAdd) {
+      // Add user to favorites
+      updatedUser = await User.findByIdAndUpdate(
+        userIdToAdd,
+        { $push: { favorites: userId } },
+        { new: true }
+      );
+    } else if (userIdToRemove) {
+      // Remove user from favorites
+      updatedUser = await User.findByIdAndUpdate(
+        userId,
+        { $pull: { favorites: userIdToRemove } },
+        { new: true }
+      );
+    }
+
+    if (!updatedUser) {
+      res.status(404).json({ message: "User not found" });
+      return;
+    }
+
+    res.json(updatedUser);
+  } catch (error) {
+    res.status(500).json({ message: "Internal server error" });
   }
 });
 
