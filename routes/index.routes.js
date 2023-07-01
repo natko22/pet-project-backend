@@ -70,8 +70,8 @@ router.put("/favorites/:userId", async (req, res, next) => {
     } else if (userIdToRemove) {
       // Remove user from favorites
       updatedUser = await User.findByIdAndUpdate(
-        userId,
-        { $pull: { favorites: userIdToRemove } },
+        userIdToRemove,
+        { $pull: { favorites: userId } },
         { new: true }
       );
     }
