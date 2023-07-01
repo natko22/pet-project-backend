@@ -87,4 +87,15 @@ router.put("/favorites/:userId", async (req, res, next) => {
   }
 });
 
+// Get all users in favorites
+router.get("/favorites/:userId", async (req, res) => {
+  try {
+    const user = await User.findById(req.params.userId)
+    const favorites = await User.find({ _id: { $in: user.favorites } });
+    res.json(favorites);
+  } catch (error) {
+    res.status(500).json({ error: "Error fetching favorites" });
+  }
+});
+
 module.exports = router;
