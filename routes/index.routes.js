@@ -26,13 +26,15 @@ router.get("/pets/:_id", async (req, res) => {
 // add new pet
 router.post("/add-pet", async (req, res) => {
   try {
-    const ownerId = req.body.owner
-    delete req.body.owner
-    console.log(ownerId, req.body)
+    const ownerId = req.body.owner;
+    delete req.body.owner;
+    console.log(ownerId, req.body);
     const newPet = new Pet(req.body);
     console.log(newPet);
     const savedPet = await newPet.save();
-    const updatedUser = await User.findByIdAndUpdate(ownerId,{$push:{pets:savedPet._id}})
+    const updatedUser = await User.findByIdAndUpdate(ownerId, {
+      $push: { pets: savedPet._id },
+    });
     res.status(201).json(savedPet);
   } catch (error) {
     res.status(500).json({ error: "Error adding pet" });
