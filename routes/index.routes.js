@@ -83,18 +83,12 @@ router.post("/bookings", async (req, res) => {
       {
         $push: {
           bookings: savedBooking._id,
-          availability: {
-            startDate: startDate,
-            endDate: endDate,
-          },
         },
       },
-      { new: true }
+      {
+        new: true,
+      }
     );
-
-    const user = await User.findById(sitterId);
-    user.bookings.push(savedBooking._id);
-    await user.save();
 
     res.status(201).json(savedBooking);
   } catch (error) {
