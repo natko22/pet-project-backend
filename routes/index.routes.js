@@ -54,6 +54,51 @@ router.get("/pet-profiles", async (req, res) => {
   }
 });
 
+
+// Add or remove user from favorites
+router.put("/favorites/:userId", async (req, res, next) => {
+  try {
+    const userId = req.params.userId;
+    const { userIdToAdd, userIdToRemove } = req.body;
+
+    let updatedUser;
+
+    if (userIdToAdd) {
+      // Add user to favorites
+      updatedUser = await User.findByIdAndUpdate(
+        userIdToAdd,
+        { $push: { favorites: userId } },
+        { new: true }
+      );
+    } else if (userIdToRemove) {
+      // Remove user from favorites
+      updatedUser = await User.findByIdAndUpdate(
+        userIdToRemove,
+        { $pull: { favorites: userId } },
+        { new: true }
+      );
+    }
+
+    if (!updatedUser) {
+      res.status(404).json({ message: "User not found" });
+      return;
+    }
+
+    res.json(updatedUser);
+  } catch (error) {
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+
+// Get all users in favorites
+router.get("/favorites/:userId", async (req, res) => {
+  try {
+    const user = await User.findById(req.params.userId)
+    const favorites = await User.find({ _id: { $in: user.favorites } });
+    res.json(favorites);
+  } catch (error) {
+    res.status(500).json({ error: "Error fetching favorites" });
+
 // Search sitters
 router.get("/sitters-profiles", async (req, res) => {
   try {
