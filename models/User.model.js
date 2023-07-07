@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const { Schema, model } = require("mongoose");
+const { Schema } = require("mongoose");
 
 const userSchema = new mongoose.Schema({
   username: {
@@ -44,7 +44,21 @@ const userSchema = new mongoose.Schema({
   ],
   availability: [
     {
-      type: String,
+      startDate: {
+        type: Date,
+        required: true,
+      },
+      endDate: {
+        type: Date,
+        required: true,
+      },
+    },
+  ],
+
+  bookings: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Booking",
     },
   ],
   img: {
