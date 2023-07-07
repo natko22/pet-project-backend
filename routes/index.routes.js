@@ -97,7 +97,7 @@ router.get("/favorites/:userId", async (req, res) => {
     const favorites = await User.find({ _id: { $in: user.favorites } });
     res.json(favorites);
   } catch (error) {
-    res.status(500).json({ error: "Error fetching favorites" });
+    res.status(500).json({ error: "Error fetching favorites" });}})
 
 // Search sitters
 router.get("/sitters-profiles", async (req, res) => {
