@@ -4,6 +4,7 @@ const jwt = require("jsonwebtoken");
 const router = express.Router();
 const saltRounds = 10;
 const User = require("../models/User.model");
+const Pet = require("../models/Pet.model");
 const { isAuthenticated } = require("../middleware/jwt.middleware");
 const fileUploader = require("../config/cloudinary.config");
 // Sign Up Route - Creates a new User in the DB
@@ -171,7 +172,7 @@ router.post(
   async (req, res, next) => {
     try {
       const userId = req.params.userId;
-      console.log(userId); // Get the user ID from the request parameters
+      console.log(userId);
 
       if (!req.file) {
         next(new Error("No file uploaded!"));

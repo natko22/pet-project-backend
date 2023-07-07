@@ -22,9 +22,6 @@ app.use("/api", indexRoutes);
 const authRoutes = require("./routes/auth.routes");
 app.use("/auth", authRoutes);
 
-const profileRoutes = require("./routes/auth.routes");
-app.use("/auth", isAuthenticated, profileRoutes);
-
 const editPetProfileRoutes = require("./routes/editPetProfile.routes");
 app.use("/api", editPetProfileRoutes);
 
