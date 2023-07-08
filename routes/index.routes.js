@@ -144,4 +144,22 @@ router.post("/bookings", async (req, res) => {
   }
 });
 
+// add new review
+router.post("/add-review", async (req, res) => {
+  try {
+    const ownerId = req.body.owner;
+    delete req.body.owner;
+    console.log(ownerId, req.body);
+    const newReview = new Review(req.body);
+    console.log(newReview);
+    const savedReview = await newReview.save();
+    const updatedUser = await User.findByIdAndUpdate(ownerId, {
+      $push: { reviews: savedReview._id },
+    });
+    res.status(201).json(savedReview);
+  } catch (error) {
+    res.status(500).json({ error: "Error adding pet" });
+  }
+});
+
 module.exports = router;
