@@ -33,8 +33,8 @@ router.post("/add-pet", fileUploader.single("imageUrl"), async (req, res) => {
     console.log(ownerId, req.body);
     const newPetData = {
       ...req.body,
-      img: req.file ? req.file.path : ""
-    }
+      img: req.file ? req.file.path : "",
+    };
     const newPet = new Pet(newPetData);
     console.log(newPet);
     const savedPet = await newPet.save();
@@ -47,7 +47,6 @@ router.post("/add-pet", fileUploader.single("imageUrl"), async (req, res) => {
   }
 });
 
-
 // Get all pet profiles
 router.get("/pet-profiles", async (req, res) => {
   try {
@@ -58,7 +57,6 @@ router.get("/pet-profiles", async (req, res) => {
     res.status(500).json({ error: "Error fetching pet profiles" });
   }
 });
-
 
 // Add or remove user from favorites
 router.put("/favorites/:userId", async (req, res, next) => {
@@ -98,11 +96,13 @@ router.put("/favorites/:userId", async (req, res, next) => {
 // Get all users in favorites
 router.get("/favorites/:userId", async (req, res) => {
   try {
-    const user = await User.findById(req.params.userId)
+    const user = await User.findById(req.params.userId);
     const favorites = await User.find({ _id: { $in: user.favorites } });
     res.json(favorites);
   } catch (error) {
-    res.status(500).json({ error: "Error fetching favorites" });}})
+    res.status(500).json({ error: "Error fetching favorites" });
+  }
+});
 
 // Search sitters
 router.get("/sitters-profiles", async (req, res) => {

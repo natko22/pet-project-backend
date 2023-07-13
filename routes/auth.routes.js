@@ -10,7 +10,8 @@ const fileUploader = require("../config/cloudinary.config");
 // Sign Up Route - Creates a new User in the DB
 router.post("/signup", async (req, res) => {
   try {
-    const { username, email, password, isPetOwner, isSitter } = req.body;
+    const { username, email, password, isPetOwner, isSitter, postalCode } =
+      req.body;
 
     // Check if username, email, and password are provided as empty string
     if (!username || !email || !password) {
@@ -56,6 +57,7 @@ router.post("/signup", async (req, res) => {
       username,
       email,
       password: hashedPassword,
+      postalCode,
       isPetOwner,
       isSitter,
     });

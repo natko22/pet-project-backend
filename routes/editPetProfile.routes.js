@@ -3,6 +3,7 @@ const router = require("express").Router();
 const { isAuthenticated } = require("../middleware/jwt.middleware");
 const fileUploader = require("../config/cloudinary.config");
 const Pet = require("../models/Pet.model");
+const User = require("../models/User.model");
 
 // get pet
 router.get("/edit-pet/:_id", async (req, res) => {
@@ -76,5 +77,29 @@ router.post(
     }
   }
 );
+
+// Delete pet profile
+router.post("/pets/:petId", async (req, res) => {
+  try {
+    const ownerId = req.body.owner;
+    console.log(req.body.owner);
+    delete req.body.owner;
+    const petId = req.params.petId;
+    const deletedPet = await Pet.findByIdAndDelete(petId);
+    const updatedUser = await User.findByIdAndUpdate(ownerId, {
+      $pull: { pets: deletedPet._id },
+    });
+    console.log(deletedPet, updatedUser, "DELETED PET AND UPDATED USER");
+
+    if (!deletedPet) {
+      return res.status(404).json({ message: "Pet not found" });
+    }
+
+    res.status(200).json({ message: "Pet deleted successfully" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
 
 module.exports = router;
