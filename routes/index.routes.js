@@ -117,10 +117,10 @@ router.get("/sitters-profiles", async (req, res) => {
 // Create a new booking
 router.post("/bookings", async (req, res) => {
   try {
-    const { sitterId, startDate, endDate, ...formData } = req.body;
+    const { ownerId,sitterId, startDate, endDate, ...formData } = req.body;
     console.log(formData, "formdata");
 
-    if (!sitterId || !startDate || !endDate) {
+    if (!sitterId || !startDate || !endDate || !ownerId) {
       return res.status(400).json({ error: "Missing required fields" });
     }
 
@@ -146,6 +146,37 @@ router.post("/bookings", async (req, res) => {
     res
       .status(500)
       .json({ error: "An error occurred while creating the booking" });
+  }
+});
+
+//set available date
+router.post("/availableDates", async (req, res) => {
+  try {
+    const {userId, startDate, endDate, ...formData } = req.body;
+    console.log(formData, "formdata");
+
+    if (!userId || !startDate || !endDate) {
+      return res.status(400).json({ error: "Missing required fields" });
+    }
+
+    const updatedUser = await User.findByIdAndUpdate(
+      userId,
+      {
+        $push: {
+          availability: {startDate,endDate},
+        },
+      },
+      {
+        new: true,
+      }
+    );
+
+    res.status(201).json(updatedUser);
+  } catch (error) {
+    console.error("Error creating available dates:", error);
+    res
+      .status(500)
+      .json({ error: "An error occurred while creating available dates" });
   }
 });
 
