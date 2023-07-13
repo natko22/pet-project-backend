@@ -77,4 +77,21 @@ router.post(
   }
 );
 
+// Delete pet profile
+router.delete("/pets/:petId", async (req, res) => {
+  try {
+    const petId = req.params.petId;
+    const deletedPet = await Pet.findByIdAndDelete(petId);
+
+    if (!deletedPet) {
+      return res.status(404).json({ message: "Pet not found" });
+    }
+
+    res.status(200).json({ message: "Pet deleted successfully" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+
 module.exports = router;
