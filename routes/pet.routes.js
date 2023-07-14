@@ -5,6 +5,45 @@ const fileUploader = require("../config/cloudinary.config");
 const Pet = require("../models/Pet.model");
 const User = require("../models/User.model");
 
+// get one pet by id
+router.get("/pets/:_id", async (req, res) => {
+  const pet = await Pet.findById(req.params._id);
+  res.json(pet);
+});
+
+// add new pet
+router.post("/add-pet", fileUploader.single("imageUrl"), async (req, res) => {
+  try {
+    const ownerId = req.body.owner;
+    delete req.body.owner;
+    console.log(ownerId, req.body);
+    const newPetData = {
+      ...req.body,
+      img: req.file ? req.file.path : "",
+    };
+    const newPet = new Pet(newPetData);
+    console.log(newPet);
+    const savedPet = await newPet.save();
+    const updatedUser = await User.findByIdAndUpdate(ownerId, {
+      $push: { pets: savedPet._id },
+    });
+    res.status(201).json(savedPet);
+  } catch (error) {
+    res.status(500).json({ error: "Error adding pet" });
+  }
+});
+
+// Get all pet profiles
+router.get("/pet-profiles", async (req, res) => {
+  try {
+    const petProfiles = await Pet.find();
+    res.json(petProfiles);
+    console.log(petProfiles, "PET PROFILES");
+  } catch (error) {
+    res.status(500).json({ error: "Error fetching pet profiles" });
+  }
+});
+
 // get pet
 router.get("/edit-pet/:_id", async (req, res) => {
   try {

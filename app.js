@@ -22,8 +22,8 @@ app.use("/api", indexRoutes);
 const authRoutes = require("./routes/auth.routes");
 app.use("/auth", authRoutes);
 
-const editPetProfileRoutes = require("./routes/editPetProfile.routes");
-app.use("/api", editPetProfileRoutes);
+const petRoutes = require("./routes/pet.routes");
+app.use("/api", petRoutes);
 
 // ❗ To handle errors. Routes that don't exist or errors that you handle in specific routes
 require("./error-handling")(app);

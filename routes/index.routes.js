@@ -19,45 +19,6 @@ router.get("/users/:_id", async (req, res) => {
   res.json(user);
 });
 
-// get one pet by id
-router.get("/pets/:_id", async (req, res) => {
-  const pet = await Pet.findById(req.params._id);
-  res.json(pet);
-});
-
-// add new pet
-router.post("/add-pet", fileUploader.single("imageUrl"), async (req, res) => {
-  try {
-    const ownerId = req.body.owner;
-    delete req.body.owner;
-    console.log(ownerId, req.body);
-    const newPetData = {
-      ...req.body,
-      img: req.file ? req.file.path : "",
-    };
-    const newPet = new Pet(newPetData);
-    console.log(newPet);
-    const savedPet = await newPet.save();
-    const updatedUser = await User.findByIdAndUpdate(ownerId, {
-      $push: { pets: savedPet._id },
-    });
-    res.status(201).json(savedPet);
-  } catch (error) {
-    res.status(500).json({ error: "Error adding pet" });
-  }
-});
-
-// Get all pet profiles
-router.get("/pet-profiles", async (req, res) => {
-  try {
-    const petProfiles = await Pet.find();
-    res.json(petProfiles);
-    console.log(petProfiles, "PET PROFILES");
-  } catch (error) {
-    res.status(500).json({ error: "Error fetching pet profiles" });
-  }
-});
-
 // Add or remove user from favorites
 router.put("/favorites/:userId", async (req, res, next) => {
   try {
@@ -117,7 +78,7 @@ router.get("/sitters-profiles", async (req, res) => {
 // Create a new booking
 router.post("/bookings", async (req, res) => {
   try {
-    const { ownerId,sitterId, startDate, endDate, ...formData } = req.body;
+    const { ownerId, sitterId, startDate, endDate, ...formData } = req.body;
     console.log(formData, "formdata");
 
     if (!sitterId || !startDate || !endDate || !ownerId) {
@@ -152,7 +113,7 @@ router.post("/bookings", async (req, res) => {
 //set available date
 router.post("/availableDates", async (req, res) => {
   try {
-    const {userId, startDate, endDate, ...formData } = req.body;
+    const { userId, startDate, endDate, ...formData } = req.body;
     console.log(formData, "formdata");
 
     if (!userId || !startDate || !endDate) {
@@ -163,7 +124,7 @@ router.post("/availableDates", async (req, res) => {
       userId,
       {
         $push: {
-          availability: {startDate,endDate},
+          availability: { startDate, endDate },
         },
       },
       {
