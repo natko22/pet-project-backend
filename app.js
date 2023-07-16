@@ -8,12 +8,43 @@ require("./db");
 // Handles http requests (express is node js framework)
 // https://www.npmjs.com/package/express
 const express = require("express");
+const cors = require("cors");
+
 const { isAuthenticated } = require("./middleware/jwt.middleware");
 
 const app = express();
 
 // ℹ️ This function is getting exported from the config folder. It runs most pieces of middleware
 require("./config")(app);
+
+// google -login
+
+const passport = require("passport");
+const cookieSession = require("cookie-session");
+const passportSetup = require("./middleware/passport");
+const session = require("express-session");
+
+app.use(
+  session({
+    name: "session",
+    keys: ["pet-project"],
+    maxAge: 24 * 60 * 60 * 100,
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false,
+  })
+);
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+app.use(
+  cors({
+    origin: "http://localhost:3000",
+    methods: "GET,POST,PUT,DELETE",
+    credentials: true,
+  })
+);
 
 // 👇 Start handling routes here
 const indexRoutes = require("./routes/index.routes");

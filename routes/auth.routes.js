@@ -7,6 +7,9 @@ const User = require("../models/User.model");
 const Pet = require("../models/Pet.model");
 const { isAuthenticated } = require("../middleware/jwt.middleware");
 const fileUploader = require("../config/cloudinary.config");
+const passport = require("passport");
+const passportSetup = require("../middleware/passport");
+
 // Sign Up Route - Creates a new User in the DB
 router.post("/signup", async (req, res) => {
   try {
@@ -127,6 +130,34 @@ router.get("/verify", isAuthenticated, (req, res) => {
   // previously set as the token payload
   res.status(200).json(req.payload);
 });
+
+// // Google sign-up
+// router.get(
+//   "/google/signup",
+//   passport.authenticate("google", { scope: ["profile", "email"] })
+// );
+
+// router.get(
+//   "/google/signup",
+//   passport.authenticate("google", {
+//     failureRedirect: "/login",
+//     successRedirect: "/signup",
+//   })
+// );
+
+// Google Login
+router.get(
+  "/google",
+  passport.authenticate("google", { scope: ["profile", "email"] })
+);
+
+router.get(
+  "/google",
+  passport.authenticate("google", {
+    successRedirect: "/login",
+    failureRedirect: "http://localhost:3000/login",
+  })
+);
 
 // get userId
 router.get("/edit/:_id", async (req, res) => {
