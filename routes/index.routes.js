@@ -68,7 +68,14 @@ router.get("/favorites/:userId", async (req, res) => {
 // Search sitters
 router.get("/sitters-profiles", async (req, res) => {
   try {
-    const sitters = await User.find({ isSitter: true });
+    const { postalCode } = req.query;
+
+    let query = { isSitter: true };
+    if (postalCode) {
+      query.postalCode = postalCode;
+    }
+
+    const sitters = await User.find(query);
     res.json(sitters);
   } catch (error) {
     res.status(500).json({ message: "Failed to fetch sitters" });

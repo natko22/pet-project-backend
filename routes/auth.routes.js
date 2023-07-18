@@ -131,31 +131,52 @@ router.get("/verify", isAuthenticated, (req, res) => {
   res.status(200).json(req.payload);
 });
 
-// // Google sign-up
-// router.get(
-//   "/google/signup",
-//   passport.authenticate("google", { scope: ["profile", "email"] })
-// );
+// auth with google
 
-// router.get(
-//   "/google/signup",
-//   passport.authenticate("google", {
-//     failureRedirect: "/login",
-//     successRedirect: "/signup",
-//   })
-// );
+router.get("/login/failed", (req, res) => {
+  console.log("Login failed");
+  res.status(401).json({
+    success: false,
+    message: "failure",
+  });
+});
 
-// Google Login
+router.get("/login/success", (req, res) => {
+  if (req.user) {
+    const { _id, username, email } = req.user;
+    // Create the token payload
+    const payload = { _id, username, email };
+
+    // Generate the token
+    const authToken = jwt.sign(payload, process.env.TOKEN_SECRET, {
+      algorithm: "HS256",
+      expiresIn: "6h",
+    });
+    console.log("Login successful. User:", req.user);
+    res.status(200).json({
+      authToken,
+      success: true,
+      message: "Successful",
+      user: req.user,
+    });
+  } else {
+    console.log("User not authenticated");
+    res.status(401).json({
+      success: false,
+      message: "User not authenticated",
+    });
+  }
+});
 router.get(
   "/google",
   passport.authenticate("google", { scope: ["profile", "email"] })
 );
 
+// callback route for google to redirect to
 router.get(
-  "/google",
+  "/google/callback",
   passport.authenticate("google", {
-    successRedirect: "/login",
-    failureRedirect: "http://localhost:3000/login",
+    successRedirect: "http://localhost:3000",
   })
 );
 

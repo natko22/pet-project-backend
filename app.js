@@ -8,24 +8,19 @@ require("./db");
 // Handles http requests (express is node js framework)
 // https://www.npmjs.com/package/express
 const express = require("express");
-const cors = require("cors");
 
 const { isAuthenticated } = require("./middleware/jwt.middleware");
 
 const app = express();
 
-// ℹ️ This function is getting exported from the config folder. It runs most pieces of middleware
-require("./config")(app);
-
 // google -login
 
+const passportSetup = require("./middleware/passport");
 const passport = require("passport");
 const cookieSession = require("cookie-session");
-const passportSetup = require("./middleware/passport");
-const session = require("express-session");
 
 app.use(
-  session({
+  cookieSession({
     name: "session",
     keys: ["pet-project"],
     maxAge: 24 * 60 * 60 * 100,
@@ -38,11 +33,16 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
+// ℹ️ This function is getting exported from the config folder. It runs most pieces of middleware
+require("./config")(app);
+
+const cors = require("cors");
+
 app.use(
   cors({
-    origin: "http://localhost:3000",
-    methods: "GET,POST,PUT,DELETE",
-    credentials: true,
+    origin: "*",
+    methods: "GET, POST, PATCH, DELETE, PUT",
+    allowedHeaders: "Content-Type, Authorization, Access-Control-Allow-Origin",
   })
 );
 
@@ -54,6 +54,7 @@ const authRoutes = require("./routes/auth.routes");
 app.use("/auth", authRoutes);
 
 const petRoutes = require("./routes/pet.routes");
+const cookieParser = require("cookie-parser");
 app.use("/api", petRoutes);
 
 // ❗ To handle errors. Routes that don't exist or errors that you handle in specific routes
