@@ -7,7 +7,9 @@ const mongoose = require("mongoose");
 
 const MONGO_URI =
   process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/pet-project-backend";
-
+// process.env.CLIENT_ID,
+//   process.env.CLIENT_SECRET,
+//   process.env.REDIRECT_URL,
 mongoose
   .connect(MONGO_URI)
   .then((x) => {
