@@ -142,6 +142,7 @@ router.get("/login/failed", (req, res) => {
 });
 
 router.get("/login/success", (req, res) => {
+  console.log("this is the req.user", req.user);
   if (req.user) {
     const { _id, username, email } = req.user;
     // Create the token payload
@@ -173,12 +174,50 @@ router.get(
 );
 
 // callback route for google to redirect to
+// router.get(
+//   "/google/callback",
+//   passport.authenticate("google", {
+//     successRedirect: "http://localhost:5005/auth/login/success",
+//   })
+// );
+//login with passport
+router.post("/login", (req, res, next) => {
+  passport.authenticate("local", (err, user, info) => {
+    if (err) {
+      console.log("here is the error", err);
+      return next(err);
+    }
+    if (!user) {
+      console.log("here is the info", info);
+      res.status(401).json({ message: info });
+    } else {
+      req.logIn(user, function (err) {
+        if (err) res.status(200).json({ message: err });
+        res.status(201).json({ message: user });
+      });
+    }
+  })(req, res, next);
+});
+
 router.get(
-  "/google/callback",
-  passport.authenticate("google", {
-    successRedirect: "http://localhost:3000",
-  })
-);
+  "/google/callback",(req, res, next)=>{
+  passport.authenticate("google", (err, user, info) => {
+    if (err) {
+      console.log("here is the error", err);
+      return next(err);
+    }
+    if (!user) {
+      console.log("here is the info", info);
+      res.status(401).json({ message: info });
+    } else {
+      req.logIn(user, function (err) {
+        console.log("!!!!!!!!!!!!!!! here")
+        if (err) res.status(200).json({ message: err });
+        res.status(201).json({ message: user });
+      });
+    }
+  })(req, res, next)
+});
 
 // get userId
 router.get("/edit/:_id", async (req, res) => {
