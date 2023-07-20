@@ -148,6 +148,28 @@ router.post("/availableDates", async (req, res) => {
   }
 });
 
+// Remove available date
+router.delete("/availableDates/:bookingId", async (req, res) => {
+  try {
+    const bookingId = req.params.bookingId;
+
+    const updatedUser = await User.findOneAndUpdate(
+      { availability: { $elemMatch: { _id: bookingId } } },
+      { $pull: { availability: { _id: bookingId } } },
+      { new: true }
+    );
+
+    if (!updatedUser) {
+      return res.status(404).json({ message: "Booking not found" });
+    }
+
+    res.json(updatedUser);
+  } catch (error) {
+    console.error("Error removing available date:", error);
+    res.status(500).json({ error: "An error occurred while removing the available date" });
+  }
+});
+
 // add new review
 router.post("/add-review", async (req, res) => {
   try {
