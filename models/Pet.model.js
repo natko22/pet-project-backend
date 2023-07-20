@@ -2,6 +2,10 @@ const mongoose = require("mongoose");
 const { Schema, model } = require("mongoose");
 
 const petSchema = new mongoose.Schema({
+  owner: {
+    type: Schema.Types.ObjectId,
+  },
+
   name: {
     type: String,
     required: true,

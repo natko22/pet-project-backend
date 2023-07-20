@@ -15,7 +15,7 @@ router.get("/pets/:_id", async (req, res) => {
 router.post("/add-pet", fileUploader.single("imageUrl"), async (req, res) => {
   try {
     const ownerId = req.body.owner;
-    delete req.body.owner;
+    // delete req.body.owner;
     console.log(ownerId, req.body);
     const newPetData = {
       ...req.body,
