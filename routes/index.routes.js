@@ -188,4 +188,41 @@ router.post("/add-review", async (req, res) => {
   }
 });
 
+// Update review
+router.put("/reviews/:_id", async (req, res) => {
+  try {
+    const reviewId = req.params._id;
+    const updatedReview = await Review.findByIdAndUpdate(reviewId, req.body, {
+      new: true,
+    });
+    if (!updatedReview) {
+      return res.status(404).json({ message: "Review not found" });
+    }
+    res.json(updatedReview);
+  } catch (error) {
+    console.error("Error updating review:", error);
+    res.status(500).json({ error: "An error occurred while updating the review" });
+  }
+});
+
+// get a review by  id
+router.get("/reviews/:_id", async (req, res) => {
+  try {
+    const review = await Review.findById(req.params._id);
+
+    if (!review) {
+      res.status(404).json({ message: "Review not found" });
+      return;
+    }
+
+    res.json(review);
+  } catch (error) {
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+
+
+
+
+
 module.exports = router;
