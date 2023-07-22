@@ -19,20 +19,22 @@ router.post("/signup", async (req, res) => {
     if (!username || !email || !password) {
       return res
         .status(400)
-        .json({ message: "Provide username, email, and password" });
+        .json({ message: "Please provide username, email, and password" });
     }
 
     // Check if isPetOwner and isSitter are provided
     if (isPetOwner === undefined || isSitter === undefined) {
       return res
         .status(400)
-        .json({ message: "Provide isPetOwner and isSitter values" });
+        .json({ message: " Please provide isPetOwner and isSitter values" });
     }
 
     // Using regex to validate the email format
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
     if (!emailRegex.test(email)) {
-      return res.status(400).json({ message: "Provide a valid email address" });
+      return res
+        .status(400)
+        .json({ message: " Please provide a valid email address" });
     }
 
     // Using regex to validate the password format
@@ -79,7 +81,9 @@ router.post("/login", async (req, res) => {
 
     // Check if email or password are provided as empty string
     if (!email || !password) {
-      return res.status(400).json({ message: "Provide email and password." });
+      return res
+        .status(400)
+        .json({ message: "Please provide email and password." });
     }
 
     // Check the users collection if a user with the same email exists
