@@ -183,9 +183,7 @@ router.get(
       expiresIn: "6h",
     });
     console.log("AUTH-TOKEN", authToken);
-    res.redirect(
-      `${proccess.env.CLIENT_URL}/profile/${_id}?token=${authToken}`
-    );
+    res.redirect(`${process.env.CLIENT_URL}/profile/${_id}?token=${authToken}`);
   }
 );
 
