@@ -9,7 +9,7 @@ const { isAuthenticated } = require("../middleware/jwt.middleware");
 const fileUploader = require("../config/cloudinary.config");
 const passport = require("passport");
 const passportSetup = require("../middleware/passport");
-
+const CLIENT_URL = "http://localhost:3000";
 // Sign Up Route - Creates a new User in the DB
 router.post("/signup", async (req, res) => {
   try {
@@ -175,9 +175,17 @@ router.get(
 // callback route for google to redirect to
 router.get(
   "/google/callback",
-  passport.authenticate("google", {
-    successRedirect: "http://localhost:3000",
-  })
+  passport.authenticate("google", { session: false }),
+  (req, res) => {
+    const { _id, username, email } = req.user;
+    const payload = { _id, username, email };
+    const authToken = jwt.sign(payload, process.env.TOKEN_SECRET, {
+      algorithm: "HS256",
+      expiresIn: "6h",
+    });
+    console.log("AUTH-TOKEN", authToken);
+    res.redirect(`${CLIENT_URL}/profile/${_id}?token=${authToken}`);
+  }
 );
 
 // get userId
