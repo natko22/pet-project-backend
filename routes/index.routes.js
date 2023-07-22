@@ -166,7 +166,9 @@ router.delete("/availableDates/:bookingId", async (req, res) => {
     res.json(updatedUser);
   } catch (error) {
     console.error("Error removing available date:", error);
-    res.status(500).json({ error: "An error occurred while removing the available date" });
+    res
+      .status(500)
+      .json({ error: "An error occurred while removing the available date" });
   }
 });
 
@@ -201,7 +203,9 @@ router.put("/reviews/:_id", async (req, res) => {
     res.json(updatedReview);
   } catch (error) {
     console.error("Error updating review:", error);
-    res.status(500).json({ error: "An error occurred while updating the review" });
+    res
+      .status(500)
+      .json({ error: "An error occurred while updating the review" });
   }
 });
 
@@ -220,9 +224,5 @@ router.get("/reviews/:_id", async (req, res) => {
     res.status(500).json({ message: "Internal server error" });
   }
 });
-
-
-
-
 
 module.exports = router;

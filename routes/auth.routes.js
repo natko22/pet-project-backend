@@ -9,7 +9,6 @@ const { isAuthenticated } = require("../middleware/jwt.middleware");
 const fileUploader = require("../config/cloudinary.config");
 const passport = require("passport");
 const passportSetup = require("../middleware/passport");
-const CLIENT_URL = "http://localhost:3000";
 // Sign Up Route - Creates a new User in the DB
 router.post("/signup", async (req, res) => {
   try {
@@ -184,7 +183,9 @@ router.get(
       expiresIn: "6h",
     });
     console.log("AUTH-TOKEN", authToken);
-    res.redirect(`${CLIENT_URL}/profile/${_id}?token=${authToken}`);
+    res.redirect(
+      `${proccess.env.CLIENT_URL}/profile/${_id}?token=${authToken}`
+    );
   }
 );
 
