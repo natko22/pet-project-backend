@@ -21,11 +21,11 @@ passport.use(
         let user = await User.findOne({ googleId: profile.id });
         if (user) {
           // User already exists, return the user
+          console.log("User already exists:", user);
           return done(null, user);
         } else {
-          const password = generateTemporaryPassword();
           const salt = await bcrypt.genSalt(saltRounds);
-          const hashedPassword = await bcrypt.hash(password, salt);
+          const hashedPassword = await bcrypt.hash("googlepassword", salt);
           // User doesn't exist, create a new user in  database
           user = new User({
             googleId: profile.id,
@@ -44,6 +44,7 @@ passport.use(
           });
 
           await user.save();
+          console.log("New user created", user);
           return done(null, user);
         }
       } catch (error) {
@@ -59,33 +60,33 @@ passport.serializeUser((user, done) => {
   done(null, user._id);
 });
 
-passport.deserializeUser(async (id, done) => {
-  try {
-    const user = await User.findById(id);
-    done(null, user);
-  } catch (error) {
-    done(error, null);
-  }
-});
 // passport.deserializeUser(async (id, done) => {
 //   try {
 //     const user = await User.findById(id);
-//     const { _id, username, email } = user;
-
-//     const payload = { _id, username, email };
-
-//     const authToken = jwt.sign(payload, process.env.TOKEN_SECRET, {
-//       algorithm: "HS256",
-//       expiresIn: "6h",
-//     });
-
-//     const userWithToken = {
-//       user,
-//       authToken,
-//     };
-
-//     done(null, userWithToken);
+//     done(null, user);
 //   } catch (error) {
 //     done(error, null);
 //   }
 // });
+passport.deserializeUser(async (id, done) => {
+  try {
+    const user = await User.findById(id);
+    const { _id, username, email } = user;
+
+    const payload = { _id, username, email };
+
+    const authToken = jwt.sign(payload, process.env.TOKEN_SECRET, {
+      algorithm: "HS256",
+      expiresIn: "6h",
+    });
+
+    const userWithToken = {
+      user,
+      authToken,
+    };
+
+    done(null, userWithToken);
+  } catch (error) {
+    done(error, null);
+  }
+});
