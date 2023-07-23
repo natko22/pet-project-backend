@@ -1,3 +1,5 @@
+<p align="center"><img src="./assets/dog-logo.jpg" width="250px" /></p>
+
 # Petopia Backend
 
 ## Description
