@@ -1,3 +1,5 @@
+<p align="center"><img src="./assets/dog-logo.jpg" width="250px" /></p>
+
 # Petopia Backend
 
 ## Description
@@ -57,7 +59,7 @@ Petopia is a MERN (MongoDB, Express, React, Node.js) stack application dedicated
 ### Managing Bookings
 
 - As a pet sitter, you can manage your bookings through your user profile.
-- View upcoming bookings, accepted bookings, and completed bookings.
+- View upcoming bookings and add available dates.
 - Communicate with pet owners to coordinate pet sitting services.
 
 ### Logging Out
@@ -74,6 +76,10 @@ We hope you enjoy using Petopia and have a pawsome time caring for pets and conn
 - Nodemon: Development server with hot-reloading
 - dotenv: Environment variables management
 - CORS: Cross-Origin Resource Sharing
+- Use Passport for implementing Google authedication.
+- React Calendar
+- React Avatar Editor
+- Cloudinary
 
 ## Installation
 
