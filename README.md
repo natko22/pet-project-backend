@@ -128,4 +128,4 @@ MIT License
 ## Contact
 
 For any questions or inquiries, please contact
-[Yo-Chia Chen](https://github.com/Yo-Jia) and [Natassa Tsapanidou-Kornilaki](https://github.com/natko22).
+[Yo-Jia Chen](https://github.com/Yo-Jia) and [Natassa Tsapanidou-Kornilaki](https://github.com/natko22).
