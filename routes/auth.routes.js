@@ -260,7 +260,7 @@ router.post(
   }
 );
 
-// Delete user route
+// Delete user profile from admin
 router.post("/users/:_id", async (req, res) => {
   try {
     const userId = req.params._id;
