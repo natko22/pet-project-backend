@@ -102,10 +102,10 @@ router.post("/login", async (req, res) => {
 
     if (passwordCorrect) {
       // Deconstruct the user object to omit the password
-      const { _id, username, email } = foundUser;
+      const { _id, username, email, isAdmin } = foundUser;
 
       // Create an object that will be set as the token payload
-      const payload = { _id, username, email };
+      const payload = { _id, username, email, isAdmin };
 
       // Create and sign the token
       const authToken = jwt.sign(payload, process.env.TOKEN_SECRET, {
@@ -259,5 +259,28 @@ router.post(
     }
   }
 );
+
+// Delete user route
+router.post("/users/:_id", async (req, res) => {
+  try {
+    const userId = req.params._id;
+    // const ownerId = req.body.owner;
+
+    // Find the user by ID and delete it
+    const deletedUser = await User.findByIdAndDelete(userId);
+    // const updatedUser = await User.findByIdAndUpdate(ownerId, {
+    //   $pull: { bookings: deletedUser._id },
+    //   $pull: { reviews: deletedUser._id },
+    // });
+    if (!deletedUser) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.status(200).json({ message: "User deleted successfully" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
 
 module.exports = router;
