@@ -5,6 +5,8 @@ const router = express.Router();
 const saltRounds = 10;
 const User = require("../models/User.model");
 const Pet = require("../models/Pet.model");
+const Booking = require("../models/Booking.model");
+const Review = require("../models/Review.model");
 const { isAuthenticated } = require("../middleware/jwt.middleware");
 const fileUploader = require("../config/cloudinary.config");
 const passport = require("passport");
@@ -102,10 +104,10 @@ router.post("/login", async (req, res) => {
 
     if (passwordCorrect) {
       // Deconstruct the user object to omit the password
-      const { _id, username, email } = foundUser;
+      const { _id, username, email, isAdmin } = foundUser;
 
       // Create an object that will be set as the token payload
-      const payload = { _id, username, email };
+      const payload = { _id, username, email, isAdmin };
 
       // Create and sign the token
       const authToken = jwt.sign(payload, process.env.TOKEN_SECRET, {
@@ -259,5 +261,29 @@ router.post(
     }
   }
 );
+
+// Delete user profile from admin
+router.post("/users/:_id", async (req, res) => {
+  try {
+    const userId = req.params._id;
+
+    const deletedUser = await User.findByIdAndDelete(userId);
+
+    // Remove the user's ObjectId from reviews
+    await Review.deleteMany({ commenter: userId });
+    await Booking.deleteMany({ ownerId: userId });
+
+    console.log(deletedUser, "DELETED USER");
+
+    if (!deletedUser) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.status(200).json({ message: "User deleted successfully" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
 
 module.exports = router;

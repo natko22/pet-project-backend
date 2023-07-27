@@ -104,7 +104,7 @@ To run Petopia backend server locally, please follow these steps:
    npm start
    ```
 
-4. The backend server will be running on http://localhost:5000.
+4. The backend server will be running on http://localhost:5005.
 
 5. Set up the MongoDB database:
 

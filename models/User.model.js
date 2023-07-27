@@ -5,7 +5,7 @@ const userSchema = new mongoose.Schema({
   googleId: {
     type: String,
   },
-
+  isAdmin: { type: Boolean, default: false },
   username: {
     type: String,
     required: true,
