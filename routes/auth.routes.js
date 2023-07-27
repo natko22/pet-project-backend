@@ -5,6 +5,8 @@ const router = express.Router();
 const saltRounds = 10;
 const User = require("../models/User.model");
 const Pet = require("../models/Pet.model");
+const Booking = require("../models/Booking.model");
+const Review = require("../models/Review.model");
 const { isAuthenticated } = require("../middleware/jwt.middleware");
 const fileUploader = require("../config/cloudinary.config");
 const passport = require("passport");
@@ -264,17 +266,14 @@ router.post(
 router.post("/users/:_id", async (req, res) => {
   try {
     const userId = req.params._id;
-    const ownerId = req.body.ownerId;
-    const commenterId = req.body.commenter;
 
-    // Find the user by ID and delete it
     const deletedUser = await User.findByIdAndDelete(userId);
-    const updatedUser = await User.findByIdAndUpdate(ownerId, commenterId, {
-      $pull: { bookings: deletedUser._id },
-      $pull: { reviews: deletedUser._id },
-    });
 
-    console.log(deletedUser, updatedUser, "DELETED PET AND UPDATED USER");
+    // Remove the user's ObjectId from reviews
+    await Review.deleteMany({ commenter: userId });
+    await Booking.deleteMany({ ownerId: userId });
+
+    console.log(deletedUser, "DELETED USER");
 
     if (!deletedUser) {
       return res.status(404).json({ message: "User not found" });
