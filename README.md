@@ -17,6 +17,7 @@ Petopia is a MERN (MongoDB, Express, React, Node.js) stack application dedicated
 - Book a service inside sitter's profile.
 - Add a review for a pet sitter and edit it,or delete it.
 - Upload your own images in pet and sitter profiles.
+- Admin's page for Profile's managment.
 
   ## Usage
 
