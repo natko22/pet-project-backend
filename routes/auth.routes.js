@@ -272,6 +272,7 @@ router.post("/users/:_id", async (req, res) => {
     // Remove the user's ObjectId from reviews
     await Review.deleteMany({ commenter: userId });
     await Booking.deleteMany({ ownerId: userId });
+    await Pet.deleteMany({ owner: userId });
 
     console.log(deletedUser, "DELETED USER");
 
