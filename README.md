@@ -7,7 +7,7 @@
 Petopia is a MERN (MongoDB, Express, React, Node.js) stack application dedicated to connecting pet owners with loving caretakers and helping animals in need. It provides a seamless experience for pet owners and pet sitters to connect and build a community that cherishes all types of animals.
 
 ##Live Demo
-[Live Demo][(https://petopia-petopia.netlify.app/)]
+[Live Demo](https://petopia-petopia.netlify.app/)
 
 ## Features
 
@@ -134,4 +134,4 @@ MIT License
 For any questions or inquiries, please contact
 [Yo-Jia Chen](https://github.com/Yo-Jia) and [Natassa Tsapanidou-Kornilaki](https://github.com/natko22).
 
-## Go to [Petopia Fronend](https://github.com/natko22/pet-project-frontend?tab=readme-ov-file)
+## Go to [Petopia Frontend](https://github.com/natko22/pet-project-frontend?tab=readme-ov-file)
