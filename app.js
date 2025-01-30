@@ -22,7 +22,7 @@ app.use(
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
-    domain: process.env.BACKEND_URL,
+    // domain: process.env.BACKEND_URL,
   })
 );
 
