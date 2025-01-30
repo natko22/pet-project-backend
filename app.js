@@ -22,6 +22,14 @@ app.use(
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
+    cookie: {
+      secure: process.env.NODE_ENV === "production", // true in production
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+      domain:
+        process.env.NODE_ENV === "production"
+          ? "https://pet-project-backend-bxma.onrender.com"
+          : "localhost",
+    },
     // domain: process.env.BACKEND_URL,
   })
 );
@@ -32,11 +40,16 @@ app.use(passport.session());
 // ℹ️ This function is getting exported from the config folder. It runs most pieces of middleware
 require("./config")(app);
 const cors = require("cors");
+// Remove the existing cors configuration and replace with:
 app.use(
   cors({
-    origin: "*",
-    methods: "GET, POST, PATCH, DELETE, PUT",
-    allowedHeaders: "Content-Type, Authorization, Access-Control-Allow-Origin",
+    origin:
+      process.env.NODE_ENV === "production"
+        ? "https://petopia-petopia.netlify.app"
+        : "http://localhost:3000",
+    credentials: true,
+    methods: ["GET", "POST", "PATCH", "DELETE", "PUT"],
+    allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
 
