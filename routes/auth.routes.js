@@ -182,19 +182,34 @@ router.get(
   "/google/callback",
   passport.authenticate("google", { session: false }),
   (req, res) => {
-    const { _id, username, email } = req.user;
-    const payload = { _id, username, email };
-    const authToken = jwt.sign(payload, process.env.TOKEN_SECRET, {
-      algorithm: "HS256",
-      expiresIn: "6h",
-    });
-    console.log("AUTH-TOKEN", authToken);
-    const CLIENT_URL =
-      process.env.NODE_ENV === "development"
-        ? "http://localhost:3000"
-        : "https://petopia-petopia.netlify.app";
+    try {
+      console.log("Google callback reached");
+      console.log("Request user:", req.user);
 
-    res.redirect(`${process.env.CLIENT_URL}/profile/${_id}?token=${authToken}`);
+      const { _id, username, email } = req.user;
+      console.log("User data extracted:", { _id, username, email });
+
+      const payload = { _id, username, email };
+      const authToken = jwt.sign(payload, process.env.TOKEN_SECRET, {
+        algorithm: "HS256",
+        expiresIn: "6h",
+      });
+      console.log("AUTH-TOKEN generated:", authToken);
+      const CLIENT_URL =
+        process.env.NODE_ENV === "development"
+          ? "http://localhost:3000"
+          : "https://petopia-petopia.netlify.app";
+      console.log("Using CLIENT_URL:", CLIENT_URL);
+      console.log("NODE_ENV:", process.env.NODE_ENV);
+
+      const redirectUrl = `${CLIENT_URL}/profile/${_id}?token=${authToken}`;
+      console.log("Redirecting to:", redirectUrl);
+
+      res.redirect(redirectUrl);
+    } catch (error) {
+      console.error("Error in Google callback:", error);
+      res.redirect(`${CLIENT_URL}/login?error=callback_failed`);
+    }
   }
 );
 
