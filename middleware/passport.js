@@ -10,7 +10,10 @@ passport.use(
     {
       clientID: process.env.CLIENT_ID,
       clientSecret: process.env.CLIENT_SECRET,
-      callbackURL: process.env.GOOGLE_CALLBACK_URL,
+      callbackURL:
+        process.env.NODE_ENV === "production"
+          ? "https://pet-project-backend-bxma.onrender.com/auth/google/callback"
+          : "http://localhost:5005/auth/google/callback",
       scope: ["email", "profile"],
     },
     async (accessToken, refreshToken, profile, done) => {

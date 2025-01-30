@@ -1,21 +1,29 @@
-// ℹ️ package responsible to make the connection with mongodb
-// https://www.npmjs.com/package/mongoose
 const mongoose = require("mongoose");
+require("dotenv").config();
 
-// ℹ️ Sets the MongoDB URI for our app to have access to it.
-// If no env has been set, we dynamically set it to whatever the folder name was upon the creation of the app
-
+// Define MongoDB URI based on environment
 const MONGO_URI =
-  process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/pet-project-backend";
-// process.env.CLIENT_ID,
-//   process.env.CLIENT_SECRET,
-//   process.env.REDIRECT_URL,
+  process.env.NODE_ENV === "production"
+    ? process.env.MONGODB_URI // Railway MongoDB in production
+    : "mongodb://127.0.0.1:27017/pet-project-backend"; // Local MongoDB in development
+
+console.log("MongoDB Environment:", process.env.NODE_ENV);
+console.log("Connecting to MongoDB at:", MONGO_URI);
+
 mongoose
-  .connect(MONGO_URI)
+  .connect(MONGO_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    serverSelectionTimeoutMS: 5000,
+  })
   .then((x) => {
-    const dbName = x.connections[0].name;
-    console.log(`Connected to Mongo! Database name: "${dbName}"`);
+    console.log("MongoDB connection state:", mongoose.connection.readyState);
+    console.log(
+      `Connected to Mongo! Database name: "${x.connections[0].name}"`
+    );
   })
   .catch((err) => {
-    console.error("Error connecting to mongo: ", err);
+    console.error("Detailed error connecting to mongo:", err);
+    console.log("Connection string used:", MONGO_URI);
+    console.log("MongoDB connection state:", mongoose.connection.readyState);
   });

@@ -189,6 +189,11 @@ router.get(
       expiresIn: "6h",
     });
     console.log("AUTH-TOKEN", authToken);
+    const CLIENT_URL =
+      process.env.NODE_ENV === "development"
+        ? "http://localhost:3000"
+        : "https://petopia-petopia.netlify.app";
+
     res.redirect(`${process.env.CLIENT_URL}/profile/${_id}?token=${authToken}`);
   }
 );
